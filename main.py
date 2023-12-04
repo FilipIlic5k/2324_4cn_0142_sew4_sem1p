@@ -1,12 +1,15 @@
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+"""
+__author__ = "Filip Ilic"
+__email__ = "filip.ilic@htl.rennweg.at"
+__version__ = "1.0.0"
+__copyright__ = "Copyright 2023"
+__license__ = "GPL"
+__status__ = "Production"
+"""
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+
 
 
