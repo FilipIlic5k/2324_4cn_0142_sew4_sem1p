@@ -84,7 +84,7 @@ def palindrom_product(x):
 
 import string
 
-digs = string.digits + string.ascii_uppercase
+DIGITS = string.digits + string.ascii_uppercase
 
 
 def to_base(number: int, base: int) -> str:
@@ -116,7 +116,7 @@ def to_base(number: int, base: int) -> str:
     if number < 0:
         sign = -1
     elif number == 0:
-        return digs[0]
+        return DIGITS[0]
     else:
         sign = 1
 
@@ -124,14 +124,13 @@ def to_base(number: int, base: int) -> str:
     digits = []
 
     while number:
-        digits.append(digs[number % base])
+        digits.append(DIGITS[number % base])
         number = number // base
 
     if sign < 0:
         digits.append('-')
 
-    digits.reverse()
-    return ''.join(digits)
+    return ''.join(digits[::-1])
 
 
 def get_dec_hex_palindrom(x):
