@@ -27,3 +27,26 @@ def is_palindrom(s: str):
     """
     s = s.replace(" ", "").lower()
     return s == s[::-1]
+
+def is_palindrom_sentence(s:str):
+    """
+    Checks if a string is a palindrom.
+    A palindrom is a string that is the same when read backwards.
+
+    >>> str1 = is_palindrom_sentence("Oh, Chello! Voll Ehco!"); str1
+    False
+
+    >>> str2 = is_palindrom_sentence("Oh, Chello! Voll Ehcho!"); str2
+    True
+
+    >>> str3 = is_palindrom_sentence("Eine Horde bedrohe nie!"); str3
+    True
+
+    >>> str4 = is_palindrom_sentence("O Genie, der Mann ehre dein Ego!"); str4
+    False
+
+    :param s: input string
+    :return: boolean
+    """
+    s = s.replace(" ", "").replace(",", "").replace("!", "").replace("?", "").replace(".", "").lower()
+    return is_palindrom(s)
