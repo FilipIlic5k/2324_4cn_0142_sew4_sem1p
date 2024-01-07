@@ -1,10 +1,11 @@
 from typing import List
 
 
-def collatz(n):
+def collatz(n,p:int=3):
     """
     Return the next number in the Collatz sequence.
     :param n: Number to start the sequence from
+    :param p: Number to stop the sequence
     :return: Next number in the Collatz sequence
 
     >>> c1 = collatz(25); c1
@@ -26,7 +27,7 @@ def collatz(n):
         return n // 2
 
     if n % 2 != 0:
-        return 3 * n + 1
+        return p * n + 1
 
 
 
