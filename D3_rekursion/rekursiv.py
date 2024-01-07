@@ -3,7 +3,7 @@ from time import time
 
 t0 = time()
 
-def M(n):
+def M(n, depth=0):
     """
     McCarthy's 91 function.
 
@@ -12,30 +12,32 @@ def M(n):
     All results of M(n) after n = 101 are continually increasing by 1, e.g. M(102) = 92, M(103) = 93.
 
     >>> m1 = M(87); m1
-    91
+    (91, 11)
 
     >>> m2 = M(99); m2
-    91
+    (91, 2)
 
     >>> m3 = M(101); m3
-    91
+    (91, 0)
 
     >>> m4 = M(122); m4
-    112
+    (112, 0)
 
     :param n: input number
     :return: result of the function
     """
     if n <= 100:
-        return M(M(n + 11))
+        return M(M(n + 11, depth + 1)[0], depth + 1)
     else:
-        return n - 10
+        return n - 10, depth
 
 
 m_list = [ M(n) for n in range(0, 200) ]
-m_dict = [ (n, M(n)) for n in range(0, 200)]
+m_dict = {n: M(n) for n in range(0, 200)}
 
-#print(m_list)
-#print(m_dict)
+print(m_list)
+print(m_dict)
 print("Die Berechnung dauert", time() - t0, "Sekunden.")
-#print("Die Rekursionstiefe ist maximal bei n =", max(m_dict, key=m_dict.get), "und beträgt", m_dict[max(m_dict, key=m_dict.get)])
+# Find the tuple with the maximum recursion depth
+max_tuple = max(m_dict, key=lambda n: m_dict[n][1])
+print("Die Rekursionstiefe ist maximal bei n =", max_tuple, "und beträgt", m_dict[max_tuple][1])
