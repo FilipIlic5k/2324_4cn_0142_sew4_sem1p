@@ -62,3 +62,38 @@ def collatz_sequence(number:int)->List[int]:
         sequence.append(number)
 
     return sequence
+
+
+def longest_collatz_sequence(n: int) -> tuple[int, int]:
+    """
+    Return the longest Collatz sequence length and the starting number under a given number.
+
+    >>> lcs1 = longest_collatz_sequence(100); lcs1
+    (97, 119)
+
+    >>> lcs2 = longest_collatz_sequence(1_000); lcs2
+    (871, 179)
+
+    >>> lcs3 = longest_collatz_sequence(-1_000); lcs3
+    Traceback (most recent call last):
+    ...
+    ValueError: n must be a positive integer
+
+    :param n: Number to check under
+    :return: Startnumber and Length of the longest Collatz sequence with the startnumber <=n
+    """
+    longest = 0
+    startnumber = 0
+
+    if n < 0:
+        raise ValueError("n must be a positive integer")
+
+    for i in range(1, n + 1):
+        length = len(collatz_sequence(i))
+        if length > longest:
+            longest = length
+            startnumber = i
+
+    return startnumber, longest
+
+
