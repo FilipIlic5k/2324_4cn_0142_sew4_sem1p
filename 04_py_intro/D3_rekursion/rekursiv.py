@@ -15,7 +15,7 @@ t0 = time()
 
 def M(n, depth=0):
     """
-    McCarthy's 91 function.
+    McCarthy's 91 fufdnction.
 
     The results of evaluating the function are given by M(n) = 91 for all integer arguments n ≤ 100, and M(n) = n − 10 for n > 100.
     Indeed, the result of M(101) is also 91 (101 - 10 = 91).
