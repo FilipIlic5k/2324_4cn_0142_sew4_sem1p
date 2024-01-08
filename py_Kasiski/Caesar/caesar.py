@@ -34,7 +34,7 @@ class Caesar:
         :return:
         """
 
-        return re.sub(r'[^a-z]', '', plaintext.lower())
+        return re.sub(r'[^a-z ]', '', plaintext.lower())
 
     def encrypt(self, plaintext: str, key: str = None) -> str:
         """

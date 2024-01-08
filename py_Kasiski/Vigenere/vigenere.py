@@ -7,7 +7,7 @@ __license__ = "GPL"
 __status__ = "Development"
 """
 
-from ..Caesar.caesar import Caesar
+from py_Kasiski.Caesar.caesar import Caesar
 
 
 class Vigenere:
@@ -30,7 +30,7 @@ class Vigenere:
         'b'
 
         >>> vigenere2 = Vigenere("hugo");vigenere2.encrypt("Hallo, wie geht es dir?")
-        "Ourzv, qos nynh lm jwy?"
+        'ourzvhcwlhmsontszhjwy'
 
         :param plaintext:
         :param key:
@@ -41,9 +41,9 @@ class Vigenere:
             key = self.key
 
         key = key.lower()
-        plaintext = plaintext.lower()
         ciphertext = ""
         caesar = Caesar()
+        plaintext = caesar.to_lowercase_letter_only(plaintext)
         for i in range(len(plaintext)):
             ciphertext += caesar.encrypt(plaintext[i], key[i % len(key)])
         return ciphertext
