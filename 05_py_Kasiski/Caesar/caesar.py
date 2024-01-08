@@ -23,7 +23,6 @@ class Caesar:
         """
         self.key = key
 
-
     def to_lowercase_letter_only(self, plaintext: str) -> str:
         """
         Returns the plaintext in lowercase and without special characters.
@@ -37,7 +36,7 @@ class Caesar:
 
         return re.sub(r'[^a-z]', '', plaintext.lower())
 
-    def encrypt(self, plaintext: str, key:str = None) -> str:
+    def encrypt(self, plaintext: str, key: str = None) -> str:
         """
         Encrypts the given plaintext with the given key.
         :param plaintext:
@@ -73,7 +72,7 @@ class Caesar:
             ciphertext += chr((ord(c) - ord('a') + key) % 26 + ord('a'))
         return ciphertext
 
-    def decrypt(self, ciphertext: str, key:str = None) -> str:
+    def decrypt(self, ciphertext: str, key: str = None) -> str:
         """
         Decrypts the given ciphertext with the given key.
 
@@ -95,7 +94,7 @@ class Caesar:
             plaintext += chr((ord(c) - ord('a') - key) % 26 + ord('a'))
         return plaintext
 
-    def crack(self, crypttext:str, elements:int = 1) -> List[str]:
+    def crack(self, crypttext: str, elements: int = 1) -> List[str]:
         """
         Calculates a List with the most likely keys for the given crypttext.
 
@@ -120,12 +119,6 @@ class Caesar:
         elif elements > 26:
             elements = 26
 
-
-        most_common = [key for key, _ in Counter(self.to_lowercase_letter_only(crypttext)).most_common(elements)]
-
-        most_likely_keys = []
-        for key in most_common:
-            most_likely_keys.append(chr((ord(key) - ord('a') - 4) % 26 + ord('a'))) # 4 = 'e' is the most common letter in the german language
-        return most_likely_keys
+        return [self.decrypt(key, 'e') for key, _ in Counter(self.to_lowercase_letter_only(crypttext)).most_common(elements)]
 
     pass
