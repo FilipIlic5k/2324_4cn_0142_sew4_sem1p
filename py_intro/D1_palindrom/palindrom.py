@@ -69,6 +69,9 @@ def palindrom_product(x):
     >>> num_insane = palindrom_product(10_000); num_insane
     99000099
 
+    >>> million = palindrom_product(1_000_000); million
+    0
+
     :param x: input number
     :return: biggest palindrome product
     """
@@ -109,6 +112,9 @@ def to_base(number: int, base: int) -> str:
     >>> num5= to_base(10, 11); num5
     'A'
 
+    >>> num6 = to_base (1_000_000, 128); num6
+    'x'
+
     :param number: Number in 10-base system
     :param base: Base to convert to
     :return: Number converted to given base
@@ -125,7 +131,8 @@ def to_base(number: int, base: int) -> str:
 
     while number:
         digits.append(DIGITS[number % base])
-        number = number // base
+        #number = number // base
+        number //= base
 
     if sign < 0:
         digits.append('-')
@@ -142,6 +149,9 @@ def get_dec_hex_palindrom(x):
 
     >>> num2 = get_dec_hex_palindrom(5_000_000); num2
     (2485842, '25EE52')
+
+    >>> num3 = get_dec_hex_palindrom(1_000_000); num3
+    x
 
     :param x: input number
     :return: biggest palindrome number

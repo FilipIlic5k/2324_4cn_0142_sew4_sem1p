@@ -85,6 +85,9 @@ def longest_collatz_sequence(n: int) -> tuple[int, int]:
     >>> lcs2 = longest_collatz_sequence(1_000); lcs2
     (871, 179)
 
+    >>> lcs20k = longest_collatz_sequence(20_000); lcs20k
+    (871, 179)
+
     >>> lcs3 = longest_collatz_sequence(-1_000); lcs3
     Traceback (most recent call last):
     ...
