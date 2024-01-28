@@ -30,7 +30,7 @@ class Vigenere:
         'b'
 
         >>> vigenere2 = Vigenere("hugo");vigenere2.encrypt("Hallo, wie geht es dir?")
-        'ourzvhcwlhmsontszhjwy'
+        'ourzvqosnynhlmjwy'
 
         :param plaintext:
         :param key:
@@ -44,5 +44,27 @@ class Vigenere:
         caesar = Caesar()
         plaintext = caesar.to_lowercase_letter_only(plaintext)
         return ''.join([caesar.encrypt(plaintext[i], key[i % len(key)]) for i in range(len(plaintext))])
+
+    def decrypt (self, crypttext: str, key: str = None) -> str:
+        """
+        Decrypts the given crypttext with Vigenere and the given key.
+
+        >>> vigenere = Vigenere("b"); vigenere.key
+        'b'
+
+        >>> vigenere2 = Vigenere("hugo");vigenere2.decrypt("ourzvqosnynhlmjwy")
+        'hallowiegehtesdir'
+
+        :param crypttext:
+        :param key:
+        :return:
+        """
+
+        if key is None:
+            key = self.key
+
+        key = key.lower()
+        caesar = Caesar()
+        return ''.join([caesar.decrypt(crypttext[i], key[i % len(key)]) for i in range(len(crypttext))])
 
     pass
