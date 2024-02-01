@@ -6,7 +6,7 @@ __copyright__ = "Copyright 2024"
 __license__ = "GPL"
 __status__ = "Development"
 """
-from typing import List, Set
+from typing import List, Set, Tuple
 
 
 class Kasiski:
@@ -58,4 +58,32 @@ class Kasiski:
             for j in range(i+1, len(pos)):
                 dist.add(pos[j]-pos[i])
         return dist
+
+    def dist_n_tuple(self, text:str, laenge:int) -> Set[Tuple[str, int]]:
+        """
+        Überprüft alle Teilstrings aus text mit der gegebenen laenge und liefert ein Set
+        mit den Abständen aller Wiederholungen der Teilstrings in text.
+        Usage examples:
+        >>> k = Kasiski()
+        >>> k.dist_n_tuple("heissajuchei", 2) == {('ei', 9), ('he', 9)}
+        True
+        >>> k.dist_n_tuple("heissajuchei", 3) == {('hei', 9)}
+        True
+        >>> k.dist_n_tuple("heissajuchei", 4) == set()
+        True
+        >>> k.dist_n_tuple("heissajucheieinei", 2) == \
+        {('ei', 5), ('ei', 14), ('ei', 3), ('ei', 9), ('ei', 11), ('he', 9), ('ei', 2)}
+        True
+        """
+        result = set()
+        for i in range(len(text)-laenge+1):
+            substring = text[i:i+laenge]
+
+            pos = self.allpos(text, substring)
+            for j in range(len(pos)):
+                for k in range(j+1, len(pos)):
+                    dist = pos[k]-pos[j]
+                    result.add((substring, dist))
+        return result
+
 
