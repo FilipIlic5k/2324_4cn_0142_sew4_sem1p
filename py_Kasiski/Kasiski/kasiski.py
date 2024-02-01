@@ -6,7 +6,7 @@ __copyright__ = "Copyright 2024"
 __license__ = "GPL"
 __status__ = "Development"
 """
-from typing import List
+from typing import List, Set
 
 
 class Kasiski:
@@ -37,3 +37,25 @@ class Kasiski:
             else:
                 i += 1
         return pos
+
+    def alldist(self, text: str, teilstring: str) -> Set[int]:
+        """
+        Berechnet die Abstände zwischen den Wiederholungen des Teilstrings im verschlüsselten Text.
+        Usage examples:
+        >>> k = Kasiski()
+        >>> k.alldist("heissajuchei, ein ei", "ei")
+        {4, 8, 9, 13, 17}
+        >>> k.alldist("heissajuchei, ein ei", "hai")
+        {}
+        """
+        pos = self.allpos(text, teilstring)
+        dist = set()
+
+        if not pos:
+            return {}
+
+        for i in range(len(pos)):
+            for j in range(i+1, len(pos)):
+                dist.add(pos[j]-pos[i])
+        return dist
+
