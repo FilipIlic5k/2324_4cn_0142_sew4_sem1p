@@ -6,6 +6,7 @@ __copyright__ = "Copyright 2024"
 __license__ = "GPL"
 __status__ = "Development"
 """
+from collections import Counter
 from typing import List, Set, Tuple
 
 
@@ -108,3 +109,36 @@ class Kasiski:
                     dist = pos[k] - pos[j]
                     result.add(dist)
         return sorted(list(result))
+
+    def ggt(self, x: int, y: int) -> int:
+        """
+        Ermittelt den größten gemeinsamen Teiler von x und y. Mit dem Euclidischen Algorithmus.
+        Usage examples:
+        >>> k = Kasiski()
+        >>> k.ggt(10, 25)
+        5
+        >>> k.ggt(10, 25)
+        5
+        """
+        while y:
+            x, y = y, x % y
+        return x
+
+    def ggt_count(self, zahlen:List[int])->Counter:
+        """
+        Ermittelt den größten gemeinsamen Teiler von x und y.
+        Usage examples:
+        >>> k = Kasiski()
+        >>> k.ggt(10, 25)
+        5
+        >>> k.ggt(10, 25)
+        5
+        >>> from collections import Counter
+        >>> c=Counter([5,8,6,5,3,8,5,3,6,5])
+        >>> print(c)
+        Counter({5: 4, 8: 2, 6: 2, 3: 2})
+        >>> c.most_common()
+        [(5, 4), (8, 2), (6, 2), (3, 2)]
+        """
+        return Counter([self.ggt(zahlen[i], zahlen[i + 1]) for i in range(len(zahlen) - 1)])
+
