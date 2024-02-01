@@ -10,15 +10,14 @@ from typing import List, Set, Tuple
 
 
 class Kasiski:
-    def __init__(self, crypttext:str=""):
+    def __init__(self, crypttext: str = ""):
         """
         Constructor. Initializes the crypttext.
         :param crypttext:
         """
         self.crypttext = crypttext
 
-
-    def allpos(self, text:str, teilstring:str) -> List[int]:
+    def allpos(self, text: str, teilstring: str) -> List[int]:
         """
         Berechnet die Positionen von teilstring in text.
         Usage examples:
@@ -31,7 +30,7 @@ class Kasiski:
         pos = []
         i = 0
         while i < len(text):
-            if text[i:i+len(teilstring)] == teilstring:
+            if text[i:i + len(teilstring)] == teilstring:
                 pos.append(i)
                 i += len(teilstring)
             else:
@@ -55,11 +54,11 @@ class Kasiski:
             return {}
 
         for i in range(len(pos)):
-            for j in range(i+1, len(pos)):
-                dist.add(pos[j]-pos[i])
+            for j in range(i + 1, len(pos)):
+                dist.add(pos[j] - pos[i])
         return dist
 
-    def dist_n_tuple(self, text:str, laenge:int) -> Set[Tuple[str, int]]:
+    def dist_n_tuple(self, text: str, laenge: int) -> Set[Tuple[str, int]]:
         """
         Überprüft alle Teilstrings aus text mit der gegebenen laenge und liefert ein Set
         mit den Abständen aller Wiederholungen der Teilstrings in text.
@@ -76,14 +75,36 @@ class Kasiski:
         True
         """
         result = set()
-        for i in range(len(text)-laenge+1):
-            substring = text[i:i+laenge]
+        for i in range(len(text) - laenge + 1):
+            substring = text[i:i + laenge]
 
             pos = self.allpos(text, substring)
             for j in range(len(pos)):
-                for k in range(j+1, len(pos)):
-                    dist = pos[k]-pos[j]
+                for k in range(j + 1, len(pos)):
+                    dist = pos[k] - pos[j]
                     result.add((substring, dist))
         return result
 
+    def dist_n_list(self, text: str, laenge: int) -> List[int]:
+        """
+        Wie dist_tuple, liefert aber nur eine aufsteigend sortierte Liste der
+        Abstände ohne den Text zurück. In der Liste soll kein Element mehrfach vorkommen.
+        Usage examples:
+        >>> k = Kasiski()
+        >>> k.dist_n_list("heissajucheieinei", 2)
+        [2, 3, 5, 9, 11, 14]
+        >>> k.dist_n_list("heissajucheieinei", 3)
+        [9]
+        >>> k.dist_n_list("heissajucheieinei", 4)
+        []
+        """
+        result = set()
+        for i in range(len(text) - laenge + 1):
+            substring = text[i:i + laenge]
 
+            pos = self.allpos(text, substring)
+            for j in range(len(pos)):
+                for k in range(j + 1, len(pos)):
+                    dist = pos[k] - pos[j]
+                    result.add(dist)
+        return sorted(list(result))
