@@ -9,6 +9,9 @@ __status__ = "Development"
 from collections import Counter
 from typing import List, Set, Tuple
 
+from py_Kasiski.Caesar.caesar import Caesar
+from py_Kasiski.Vigenere.vigenere import Vigenere
+
 
 class Kasiski:
     def __init__(self, crypttext: str = ""):
@@ -124,7 +127,7 @@ class Kasiski:
             x, y = y, x % y
         return x
 
-    def ggt_count(self, zahlen:List[int])->Counter:
+    def ggt_count(self, zahlen: List[int]) -> Counter:
         """
         Ermittelt den größten gemeinsamen Teiler von x und y.
         Usage examples:
@@ -142,3 +145,41 @@ class Kasiski:
         """
         return Counter([self.ggt(zahlen[i], zahlen[i + 1]) for i in range(len(zahlen) - 1)])
 
+    def get_nth_letter(self, s: str, start: int, n: int) -> str:
+        """
+        Extrahiert aus s jeden n. Buchstaben beginnend mit index start.
+        Usage examples:
+        >>> k = Kasiski()
+        >>> k.get_nth_letter("Das ist kein kreativer Text.", 1, 4)
+        'asektrx'
+        """
+        return ''.join([s[i] for i in range(start, len(s), n)])
+
+    def crack_key(self, len: int) -> str:
+        """
+        Crackt den Key mit der Länge len
+
+        >>> vigenere2 = Vigenere("hugo");vigenere2.encrypt("Hallo, wie geht es dir?")
+        'ourzvqosnynhlmjwy'
+
+        >>> k = Kasiski("ourzvqosnynhlmjwy")
+        >>> k.crack_key(4)
+        'hugo'
+
+        :param len:
+        :return:
+        """
+        key = ''
+        vig = Vigenere()
+
+        for i in range(len):
+            substring = self.get_nth_letter(self.crypttext, i, len)
+
+            possible_keys = vig.decrypt(substring)
+
+            if possible_keys:
+                key += possible_keys[0]
+            else:
+                key += '?'
+
+        return key

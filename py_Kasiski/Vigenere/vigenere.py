@@ -32,6 +32,9 @@ class Vigenere:
         >>> vigenere2 = Vigenere("hugo");vigenere2.encrypt("Hallo, wie geht es dir?")
         'ourzvqosnynhlmjwy'
 
+        >>> vigenere2 = Vigenere("SPAM");vigenere2.encrypt("HalloWELT")
+        'ourzvqosnynhlmjwy'
+
         :param plaintext:
         :param key:
         :return:
@@ -68,3 +71,11 @@ class Vigenere:
         return ''.join([caesar.decrypt(crypttext[i], key[i % len(key)]) for i in range(len(crypttext))])
 
     pass
+
+if __name__ == '__main__':
+    import doctest
+
+    doctest.testmod()
+
+    vigenere = Vigenere("hugo")
+    print(vigenere.encrypt("Hallo, wie geht es dir?"))
