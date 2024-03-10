@@ -67,12 +67,12 @@ def edit1(word: str) -> Set[str]:
     :return:
 
     >>> len(edit1('abc'))
-    182
+    210
     >>> len(edit1(''))
-    26
+    30
     """
     try:
-        letters = string.ascii_lowercase
+        letters = "abcdefghijklmnopqrstuvwxyzäöüß"
         splits = split_word(word)
         deletes = [a + b[1:] for a, b in splits if b]  # removes one letter
         transposes = [a + b[1] + b[0] + b[2:] for a, b in splits if len(b) > 1]  # swaps two adjacent letters
@@ -86,7 +86,7 @@ def edit1(word: str) -> Set[str]:
         return set()
 
 
-def edit1_good(word: str, all_words: List[str]) -> Set[str]:
+def edit1_good(word: str, all_words: Set[str]) -> Set[str]:
     """
     Returns all words that are one edit away from the given word.
     :param word:
@@ -99,9 +99,76 @@ def edit1_good(word: str, all_words: List[str]) -> Set[str]:
 
     """
     try:
+        all_words_lower = {w.lower() for w in all_words}
+        possible_words = edit1(word.lower())
+        valid_words = possible_words & all_words_lower
+        final_words = {o for o in all_words if o.lower() in valid_words}
+        return final_words
+    except Exception as e:
+        print(f"Error: {e}")
+        return set()
+
+
+def edit2_good(word: str, all_words: Set[str]) -> Set[str]:
+    """
+    Returns all words that are two edit away from the given word.
+    :param word:
+    :param all_words:
+    :return:
+
+    """
+    try:
         word = word.lower()
-        possible_words = edit1(word)
-        return possible_words & set(all_words)
+        all_words_lower = {w.lower() for w in all_words}
+
+        possible_two_edit = set()
+        one_edit = edit1(word)
+        for word in one_edit:
+            possible_two_edit.update(edit1(word))
+
+        valid_words = possible_two_edit & all_words_lower
+        final_words = {o for o in all_words if o.lower() in valid_words}
+        return final_words
+    except Exception as e:
+        print(f"Error: {e}")
+        return set()
+
+
+def correct(word: str, all_words: Set[str]) -> Set[str]:
+    """
+    Lists all possible corrections for the given word.
+    It is eather in dictionary or one or two edits away from a word in the dictionary.
+    :param word:
+    :param all_words:
+    :return:
+
+    >>> words = read_all_words("de-en.txt")
+    >>> correct("Aalsuppe", words)
+    {'Aalsuppe'}
+
+    >>> correct("Alsuppe", words)
+    {'Aalsuppe'}
+
+    >>> correct("Alsupe", words)
+    {'Aalsuppe'}
+
+    >>> sorted(correct("Alsupe", words))
+    ['Aalsuppe', 'Absude', 'Lupe', 'alse']
+    """
+    try:
+        word = word.lower()
+        all_words_lower = {w.lower() for w in all_words}
+        original_to_lower_mapping = {w.lower(): w for w in all_words}
+
+        if word in original_to_lower_mapping:
+            return {original_to_lower_mapping[word]}
+        one_edit = edit1_good(word, all_words)
+        if one_edit:
+            return one_edit
+        two_edit = edit2_good(word, all_words)
+        if two_edit:
+            return two_edit
+        return {word}
     except Exception as e:
         print(f"Error: {e}")
         return set()
