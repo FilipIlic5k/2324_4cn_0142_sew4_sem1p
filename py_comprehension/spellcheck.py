@@ -34,7 +34,7 @@ def read_all_words(filename: str) -> Set[str]:
         print("Permission denied.")
         return set()
     except Exception as e:
-        print(e)
+        print(f"Error: {e}")
         return set()
 
 
@@ -46,11 +46,17 @@ def split_word(word: str) -> List[Tuple[str, str]]:
 
     >>> split_word("abc")
     [('', 'abc'), ('a', 'bc'), ('ab', 'c'), ('abc', '')]
+
+    >>> split_word("")
+    [('', '')]
+
+    >>> split_word("a")
+    [('', 'a'), ('a', '')]
     """
     try:
         return [(word[:i], word[i:]) for i in range(len(word) + 1)]
     except Exception as e:
-        print(e)
+        print(f"Error: {e}")
         return []
 
 
@@ -76,5 +82,26 @@ def edit1(word: str) -> Set[str]:
         # letters
         return set(deletes + transposes + replaces + inserts)
     except Exception as e:
-        print(e)
+        print(f"Error: {e}")
+        return set()
+
+
+def edit1_good(word: str, all_words: List[str]) -> Set[str]:
+    """
+    Returns all words that are one edit away from the given word.
+    :param word:
+    :param all_words:
+    :return:
+
+    >>> all_words = {'abc', 'acb', 'bac', 'bbc', 'a', 'ab', 'abcde'}
+    >>> sorted(edit1_good('abc', all_words))
+    ['ab', 'abc', 'acb', 'bac', 'bbc']
+
+    """
+    try:
+        word = word.lower()
+        possible_words = edit1(word)
+        return possible_words & set(all_words)
+    except Exception as e:
+        print(f"Error: {e}")
         return set()
