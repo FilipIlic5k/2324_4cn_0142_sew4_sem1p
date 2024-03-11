@@ -89,10 +89,9 @@ class Kasiski:
                     result.add((substring, dist))
         return result
 
-    def dist_n_list(self, text: str, laenge: int) -> List[int]:
-        """
-        Wie dist_tuple, liefert aber nur eine aufsteigend sortierte Liste der
-        Abstände ohne den Text zurück. In der Liste soll kein Element mehrfach vorkommen.
+    def dist_n_list(self, text: str, laenge: int) -> list[int]:
+        """Wie dist_tuple, liefert aber nur eine aufsteigend sortierte Liste der
+        Abstände ohne den Text zurück. In der Liste soll kein Element mehrfach vorkommen.
         Usage examples:
         >>> k = Kasiski()
         >>> k.dist_n_list("heissajucheieinei", 2)
@@ -102,16 +101,8 @@ class Kasiski:
         >>> k.dist_n_list("heissajucheieinei", 4)
         []
         """
-        result = set()
-        for i in range(len(text) - laenge + 1):
-            substring = text[i:i + laenge]
-
-            pos = self.allpos(text, substring)
-            for j in range(len(pos)):
-                for k in range(j + 1, len(pos)):
-                    dist = pos[k] - pos[j]
-                    result.add(dist)
-        return sorted(list(result))
+        dist = self.dist_n_tuple(text, laenge)
+        return sorted(set([d for (_, d) in dist]))
 
     def ggt(self, x: int, y: int) -> int:
         """
@@ -120,8 +111,8 @@ class Kasiski:
         >>> k = Kasiski()
         >>> k.ggt(10, 25)
         5
-        >>> k.ggt(10, 25)
-        5
+        >>> k.ggt(3, 6)
+        3
         """
         while y:
             x, y = y, x % y
@@ -158,28 +149,32 @@ class Kasiski:
     def crack_key(self, len: int) -> str:
         """
         Crackt den Key mit der Länge len
-
-        >>> vigenere2 = Vigenere("hugo");vigenere2.encrypt("Hallo, wie geht es dir?")
-        'ourzvqosnynhlmjwy'
-
-        >>> k = Kasiski("ourzvqosnynhlmjwy")
-        >>> k.crack_key(4)
-        'hugo'
-
         :param len:
         :return:
+
+        >>> string: str = 'In der faszinierenden Welt der Netzwerktechnik erstrecken sich endlose Möglichkeiten. Netzwerke sind essenziell für die Kommunikation zwischen Geräten, wobei Ethernet-Kabel, Switches und Router eine zentrale Rolle spielen. Sie ermöglichen ein reibungsloses Datenmanagement, wobei das Internetprotokoll (IP) als grundlegende Struktur dient. Ein effizientes Netzwerk erfordert sorgfältige Planung, um Engpässe zu vermeiden. Die ständige Evolution führt zu neuen Technologien wie 5G und Edge Computing. Die Sicherheit von Netzwerken ist ebenfalls von höchster Bedeutung, wobei Firewalls und Verschlüsselung eine entscheidende Schutzschicht bieten. Insgesamt ist die Netzwerktechnik ein vitaler Bestandteil unseres digitalen Zeitalters.'
+        >>> vigenere = Vigenere()
+        >>> crypt_str = vigenere.encrypt(string, "ilic")
+        >>> kasiski = Kasiski(crypt_str)
+        >>> kasiski.crack_key(4)
+        'ilic'
+        >>> crypt_str = vigenere.encrypt(string, "hugo")
+        >>> kasiski = Kasiski(crypt_str)
+        >>> kasiski.crack_key(4)
+        'hugo'
         """
-        key = ''
-        vig = Vigenere()
+        try:
+            substr_distances = self.dist_n_list(self.crypttext, len) # Abstände der Teilstrings
 
-        for i in range(len):
-            substring = self.get_nth_letter(self.crypttext, i, len)
+            factors_counter = self.ggt_count(substr_distances) # Counter mit den häufigsten Abständen
 
-            possible_keys = vig.decrypt(substring)
+            key_length = factors_counter.most_common(1)[0][0] # häufigster Abstand
 
-            if possible_keys:
-                key += possible_keys[0]
-            else:
-                key += '?'
+            potential_keys = [self.get_nth_letter(self.crypttext, i, key_length) for i in range(key_length)] # mögliche Schlüssel
 
-        return key
+            caesar = Caesar()
+            return "".join([caesar.crack(key)[0] for key in potential_keys]) # Schlüssel cracken
+        except Exception as e:
+            print(f"Error: {e}")
+            return ""
+
