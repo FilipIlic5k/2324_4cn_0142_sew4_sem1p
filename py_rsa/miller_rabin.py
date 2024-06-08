@@ -8,7 +8,7 @@ __status__ = "Development"
 """
 import random
 
-FIRST_100_PRIMES = [ 2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
+FIRST_100_PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
         31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
         73, 79, 83, 89, 97, 101, 103, 107, 109, 113,
         127, 131, 137, 139, 149, 151, 157, 163, 167, 173,
@@ -33,7 +33,38 @@ def is_prim_millerrabin(number, iterations=20):
     """
     Teste die ersten 100 Primzahlen auf Primzahl mittels Miller-Rabin-Test. Mindestens 20 Iterationen.
     """
-    pass
+
+    # number - 1 = odd_part*2^exponent - 1
+    exponent, odd_part = 0, number - 1
+    while odd_part % 2 == 0:
+        exponent += 1
+        odd_part //= 2
+
+    def isComposite(base, odd_part, number, exponent):
+        """
+        Teste, ob die Zahl zusammengesetzt ist.
+
+        :param base: Basis
+        :param odd_part: ungerader Teil von number - 1
+        :param number: Die zu testende Zahl
+        :param exponent: Exponent der die Zahl in die Form number - 1 = odd_part*2^exponent - 1 bringt
+        :return: True, wenn die Zahl zusammengesetzt ist, sonst False
+        """
+        base_power = pow(base, odd_part, number)
+        if base_power in (1, number - 1):
+            return False
+        for _ in range(exponent-1):
+            base_power = pow(base_power, 2, number)
+            if base_power == number - 1:
+                return False
+        return True
+
+    for _ in range(iterations):
+        base = random.randint(2, number - 2)
+        if isComposite(base, odd_part, number, exponent):
+            return "composite"
+
+    return "probably prime"
 
 def generate_prime(bits):
     """
@@ -46,3 +77,45 @@ def generate_prime(bits):
             return prime_candidate
 
 if __name__ == '__main__':
+    print("Teste Miller-Rabin-Algorithmus:")
+    test_numbers = [221, 24566544301293569, 2512]
+    for number in test_numbers:
+        print(f"Die Zahl {number} ist {'eine Primzahl' if is_prime(number) else 'keine Primzahl'}")
+
+    print("\nErste Primzahl mit 512 Bits:")
+    print(generate_prime(512))
+
+
+    print("\nVersteckte Nachricht in 24566544301293569 als Binärzahl mot 12 Zeichen/Zeile:")
+    binary = bin(24566544301293569)[2:]
+    for i in range(0, len(binary), 12):
+        print(binary[i:i+12])
+
+    print("\nVersteckte Nachricht in 24566544301293569 als ASCII-Zeichen:")
+    ascii = "".join([chr(int(binary[i:i+8], 2)) for i in range(0, len(binary), 8)])
+    print(ascii)
+
+    print("\nNächst höhere Primzahl von 24566544301293569:")
+    prime_higher = 24566544301293570
+    while not is_prime(prime_higher):
+        prime_higher += 1
+    print(prime_higher)
+
+    print("\nVersteckte Nachricht in nächst höhere Prim als Binärzahl mot 12 Zeichen/Zeile:")
+    binary = bin(24566544301293587)[2:]
+    for i in range(0, len(binary), 12):
+        print(binary[i:i + 12])
+
+    print("\nVersteckte Nachricht in nächst höhere Prim als ASCII-Zeichen:")
+    ascii = "".join([chr(int(binary[i:i + 8], 2)) for i in range(0, len(binary), 8)])
+    print(ascii)
+
+    print("\nUnterschiede in den beiden binären Primzahlen (mit XOR ermittelt):")
+    binary1 = bin(24566544301293569)[2:]
+    binary2 = bin(24566544301293587)[2:]
+    xor = "".join([str(int(binary1[i]) ^ int(binary2[i])) for i in range(len(binary1))])
+    for i in range(0, len(xor), 12):
+        print(xor[i:i+12])
+
+
+
